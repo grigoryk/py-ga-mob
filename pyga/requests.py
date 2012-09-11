@@ -85,7 +85,12 @@ class GIFRequest(object):
 
         #  Do not actually send the request if endpoint host is set to null
         if self.config.endpoint:
-            response = urllib2.urlopen(request, timeout=self.config.request_timeout)
+            try:
+                response = urllib2.urlopen(request, timeout=self.config.request_timeout)
+            
+            # python2.5 doesn't support timeout arg for urllib2.urlopen
+            except TypeError:
+                response = urllib2.urlopen(request)
 
         return response
 
